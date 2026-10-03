@@ -1,11 +1,23 @@
-name: SonarQube Scan
-on: [push]
+name: sonar
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
 jobs:
   sonar:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Escaneo de Codigo (SonarQube)
-        run: |
-          echo "Ejecutando analisis de codigo fuente..."
-          echo "0 bugs, 0 vulnerabilidades, 0 security hotspots detectados."
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm test
+      - name: SonarCloud scan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

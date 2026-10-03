@@ -1,20 +1,29 @@
-name: Generar Documentacion
-on: [push]
+name: generate-documentation
+on:
+  push:
+    branches: [main]
+    paths: ['database/**', 'src/**', 'scripts/**']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Crear Documentacion Mermaid
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/generate-docs.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: documentacion
+          path: docs/
+      - name: Commit de la documentacion
         run: |
-          mkdir -p docs
-          echo "## Diagramas del Sistema" > docs/diagramas.md
-          echo '```mermaid' >> docs/diagramas.md
-          echo "erDiagram" >> docs/diagramas.md
-          echo "  CLIENTE ||--o{ PEDIDO : registra" >> docs/diagramas.md
-          echo "classDiagram" >> docs/diagramas.md
-          echo "  class Pedido { +int id +String estado }" >> docs/diagramas.md
-          echo "graph TD;" >> docs/diagramas.md
-          echo "  Frontend-->API_Lavanderia;" >> docs/diagramas.md
-          echo "  API_Lavanderia-->BaseDatos;" >> docs/diagramas.md
-          echo '```' >> docs/diagramas.md
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add docs
+          git diff --cached --quiet || (git commit -m "docs: actualizar diagramas y diccionario de datos" && git push)

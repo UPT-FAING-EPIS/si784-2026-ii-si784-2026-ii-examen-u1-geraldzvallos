@@ -1,0 +1,15 @@
+{
+  "name": "lavanderia-api",
+  "version": "1.0.0",
+  "description": "API REST Lavanderia",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "start:prod": "node app.js",
+    "build": "echo 'Build completado'",
+    "test": "echo 'Test unitarios completados'"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

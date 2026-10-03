@@ -1,0 +1,13 @@
+{
+  "name": "lavanderia-api",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/server.js",
+  "engines": { "node": ">=22.5" },
+  "scripts": {
+    "start": "node --no-warnings src/server.js",
+    "test": "node --no-warnings --test --experimental-test-coverage --test-reporter=lcov --test-reporter-destination=coverage/lcov.info --test-reporter=spec --test-reporter-destination=stdout test/*.test.js",
+    "docs": "node scripts/generate-docs.js"
+  },
+  "dependencies": { "express": "^4.21.2" }
+}

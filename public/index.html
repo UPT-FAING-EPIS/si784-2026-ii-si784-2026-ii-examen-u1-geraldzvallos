@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WashNow | Lavandería a domicilio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header><h1>WashNow</h1><span id="who" class="badge">Sin cliente</span></header>
+  <main class="container">
+    <section class="card">
+      <h2>1. Registro de cliente</h2>
+      <form id="customerForm" novalidate>
+        <label for="name">Nombre</label><input id="name" required minlength="2" maxlength="100">
+        <label for="email">Email</label><input id="email" type="email" required>
+        <label for="phone">Teléfono (9 dígitos)</label><input id="phone" required pattern="\d{9}">
+        <label for="street">Dirección</label><input id="street" required minlength="3">
+        <label for="district">Distrito</label><input id="district" required minlength="2">
+        <button type="submit">Registrar</button>
+        <p id="customerMsg" class="msg" role="status"></p>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>2. Nuevo pedido</h2>
+      <form id="orderForm" novalidate>
+        <label for="service">Servicio</label>
+        <select id="service">
+          <option>lavado al peso</option><option>lavado al seco</option>
+          <option>planchado</option><option>edredones</option>
+        </select>
+        <label for="garment">Prenda</label><input id="garment" required value="camisa">
+        <label for="qty">Cantidad</label><input id="qty" type="number" min="1" max="100" value="1" required>
+        <div class="row">
+          <div><label for="pickupDate">Fecha de recojo</label><input id="pickupDate" type="date" required></div>
+          <div><label for="pickupSlot">Franja</label>
+            <select id="pickupSlot"><option>08:00-12:00</option><option>14:00-18:00</option></select></div>
+        </div>
+        <div class="row">
+          <div><label for="deliveryDate">Fecha de entrega</label><input id="deliveryDate" type="date" required></div>
+          <div><label for="deliverySlot">Franja</label>
+            <select id="deliverySlot"><option>08:00-12:00</option><option>14:00-18:00</option></select></div>
+        </div>
+        <button type="submit">Crear pedido y programar</button>
+        <p id="orderMsg" class="msg" role="status"></p>
+      </form>
+    </section>
+
+    <section class="card wide">
+      <h2>3. Seguimiento e historial</h2>
+      <p class="hint">Se actualiza automáticamente cada 5 segundos.</p>
+      <div id="orders"></div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

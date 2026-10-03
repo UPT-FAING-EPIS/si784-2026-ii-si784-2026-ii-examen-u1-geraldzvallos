@@ -1,11 +1,49 @@
-name: Snyk & Semgrep Scan
-on: [push]
+name: snyk-semgrep
+on:
+  push:
+    branches: [main]
+  pull_request:
+
 jobs:
-  security-scan:
+  semgrep:
     runs-on: ubuntu-latest
+    container:
+      image: semgrep/semgrep
     steps:
-      - uses: actions/checkout@v3
-      - name: Analisis SAST con Semgrep
-        run: echo "Escaneo de codigo con Semgrep completado. 0 hallazgos."
-      - name: Analisis de Contenedor con Snyk
-        run: echo "Escaneo de la imagen del contenedor backend con Snyk completado. 0 vulnerabilidades."
+      - uses: actions/checkout@v4
+      - name: Semgrep SAST
+        run: semgrep scan --config auto --error --sarif --output semgrep.sarif
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reporte-semgrep
+          path: semgrep.sarif
+
+  snyk:
+    runs-on: ubuntu-latest
+    env:
+      SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - name: Snyk codigo y dependencias
+        uses: snyk/actions/node@master
+        with:
+          args: --severity-threshold=high --sarif-file-output=snyk-deps.sarif
+      - name: Construir imagen
+        run: docker build -t lavanderia:scan .
+      - name: Snyk imagen del contenedor
+        uses: snyk/actions/docker@master
+        with:
+          image: lavanderia:scan
+          args: --file=Dockerfile --severity-threshold=high --sarif-file-output=snyk-image.sarif
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: reporte-snyk
+          path: |
+            snyk-deps.sarif
+            snyk-image.sarif
