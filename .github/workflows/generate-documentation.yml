@@ -1,0 +1,20 @@
+name: Generar Documentacion
+on: [push]
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Crear Documentacion Mermaid
+        run: |
+          mkdir -p docs
+          echo "## Diagramas del Sistema" > docs/diagramas.md
+          echo '```mermaid' >> docs/diagramas.md
+          echo "erDiagram" >> docs/diagramas.md
+          echo "  CLIENTE ||--o{ PEDIDO : registra" >> docs/diagramas.md
+          echo "classDiagram" >> docs/diagramas.md
+          echo "  class Pedido { +int id +String estado }" >> docs/diagramas.md
+          echo "graph TD;" >> docs/diagramas.md
+          echo "  Frontend-->API_Lavanderia;" >> docs/diagramas.md
+          echo "  API_Lavanderia-->BaseDatos;" >> docs/diagramas.md
+          echo '```' >> docs/diagramas.md

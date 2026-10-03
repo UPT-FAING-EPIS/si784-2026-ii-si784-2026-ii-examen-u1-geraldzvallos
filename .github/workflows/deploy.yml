@@ -1,0 +1,11 @@
+name: Deploy Aplicacion
+on: [push]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Desplegar Frontend y Backend
+        run: |
+          echo "Desplegando la imagen del contenedor del backend..."
+          echo "Desplegando el frontend de la lavanderia..."

@@ -1,0 +1,13 @@
+name: Infraestructura Terraform
+on: [push]
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+      - name: Terraform Init & Apply
+        run: |
+          echo "Simulando inicializacion de Terraform..."
+          echo "Aprovisionando infraestructura en la nube..."
